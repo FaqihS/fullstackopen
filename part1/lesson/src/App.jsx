@@ -4,7 +4,7 @@ const Hello = (props) => {
   console.log(props)
   return (
   <>
-   <p>Hello {props.name}{prop.age ? `, you are ${props.age} old`: ""}</p>
+   <p>Hello {props.name}{props.age ? `, you are ${props.age} old`: ""}</p>
   </>
   )
 }
