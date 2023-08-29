@@ -26,14 +26,15 @@ const PersonForm = ({ handleSubmit, name, number, handleChange }) => {
   );
 };
 
-const Persons = ({ persons }) => {
+const Persons = ({ persons,handleClick }) => {
   return (
     <div>
-      {persons.map((person) => (
+      {persons ? persons.map((person) => (
         <p key={person.id}>
           {person.name} {person.number}
+            <button key={person.id} onClick={handleClick(person)}>delete</button>
         </p>
-      ))}
+      )): ""}
     </div>
   );
 };

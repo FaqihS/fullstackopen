@@ -1,55 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Filter, PersonForm, Persons } from "./components/Components";
-
+import personService from "./service/phonebook";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456", id: 1 },
-    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
-    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
-    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
-  ]);
+  const [persons, setPersons] = useState([]);
 
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
 
+  const getAllPerson = () => {
+    personService.getAll().then((initalPersons) => {
+      setPersons(initalPersons);
+    });
+  };
+  useEffect(getAllPerson, []);
+
   const addPerson = (e) => {
     e.preventDefault();
+
     const person = {
       name: newName,
       number: newNumber,
-      id: persons.at(-1).id + 1,
+      id: persons[0] ? persons.at(-1).id + 1 : 1,
     };
+
     if (person.name) {
-      for (const same of persons.map((p) => p.name)) {
-        if (person.name === same) {
-          alert(`${person.name} is Exist`);
+      for (const same of persons) {
+        if (person.name === same.name) {
+          const updatedPerson = {
+            ...person,
+            id: same.id
+          }
+          window.confirm(`${person.name} is exist wanna change the number?`) && (
+           personService.update(updatedPerson).then(getAllPerson)
+          )
           setNewName("");
           setNewNumber("");
           return;
         }
       }
-      setPersons(persons.concat(person));
+
+      personService.create(person).then((updatedPersons) => {
+        setPersons(persons.concat(updatedPersons));
+      });
     }
     setNewName("");
     setNewNumber("");
   };
 
   const filteredPerson = persons.filter((person) => {
-    return person.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+    return person.name.toLowerCase().includes(search.toLowerCase());
   });
 
   const handleChange = (input) => {
     const nameChange = (e) => setNewName(e.target.value);
     const numberChange = (e) => setNewNumber(e.target.value);
-    const searchChange = (e) =>  setSearch(e.target.value);
-    
-    return input === "name" ? nameChange
-      : input === "number" ? numberChange
+    const searchChange = (e) => setSearch(e.target.value);
+
+    return input === "name"
+      ? nameChange
+      : input === "number"
+      ? numberChange
       : searchChange;
+  };
+
+  const handleClick = (person) => () => {
+    if (window.confirm(`Are you sure you want to Delete ${person.name} ?`)) {
+      personService.deletePerson(person).then(getAllPerson);
+    }
   };
 
   return (
@@ -64,7 +83,11 @@ const App = () => {
         handleChange={handleChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredPerson} />
+      {filteredPerson ? (
+        <Persons persons={filteredPerson} handleClick={handleClick} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
