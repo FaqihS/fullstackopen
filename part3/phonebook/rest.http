@@ -1,0 +1,29 @@
+GET http://localhost:3001/api/persons/1
+GET http://localhost:3001/info/asd
+
+GET http://localhost:3001/api/persons/1
+
+DELETE http://localhost:3001/api/persons/5
+
+
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+ "name": "From-Rest-nvim",
+ "number": "320991023"
+}
+
+###
+
+
+
+PUT http://localhost:3001/api/persons
+Content-Type: application/json
+
+  {
+    "name": "From-Rest-nvim",
+    "number": "32099103"
+  }
+
+
