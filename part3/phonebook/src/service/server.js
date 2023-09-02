@@ -38,10 +38,7 @@ const unknownEndpoint = (request, response) => {
 
 
 app.get("/info", (req, res) => {
-  const totalPersons = persons.reduce((total) => {
-    return total + 1;
-  }, 0);
-
+  const totalPersons = persons.length
   const time = new Date();
 
   res.send(`<p>Total Person = ${totalPersons}</p><br><p>Time now ${time}</p>`);
