@@ -1,7 +1,18 @@
+require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
+const Note = require('./models/note')
+
+
+
+
+// mongoose.connect(url)
+
+
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 
 let notes = [
@@ -27,22 +38,26 @@ app.get('/',(req,res)=>{
 })
 
 app.get('/api/notes',(req,res)=>{
-  res.json(notes)
+  Note.find({}).then(note=>{
+    console.log(note)
+    res.json(note)
+
+  }).catch(err=>next(err))
 })
 
 app.get('/api/notes/:id',(req,res) => {
-  const id = Number(req.params.id)
-  const note = notes.find(n=> {
-    return n.id === id
+  Note.findById(req.params.id).then(note =>{
+    res.json(note)
   })
-
-  note ? res.json(note)
-    : res.status(404).end()
   
 })
 
-app.delete('/api/notes/:id', (request, response) => {
-  const id = Number(request.params.id)
+app.delete('/api/notes/:id', (request, response,next) => {
+  Note.findByIdAndRemove(request.params.id)
+  .then(result => {
+      response.status(204).end()
+    })
+  .catch(err => next(err))
 
 
   notes = notes.filter(note => note.id !== id)
@@ -50,33 +65,62 @@ app.delete('/api/notes/:id', (request, response) => {
   response.status(204).end()
 })
 
-const generateId = () => {
-  const maxId = notes.length > 0 ? Math.max(...notes.map(n=>n.id)) : 0
-  return maxId + 1
-}
 
 app.post('/api/notes',(req,res) => {
 
   const body = req.body
 
 
-  if(!body.content ){
+  if(body.content === undefined ){
     res.status(400).json({
       error: "Content not found"
     })
   }
   
-  const note = {
+  const note = new Note ({
     content: body.content,
     important: body.important || false,
-    id: generateId()
-  }
+    
+  })
 
-  notes = notes.concat(note)
+  note.save().then(savedNote => {
+    res.json(savedNote)
+  })
 
-  res.json(note)
+  
 })
 
-const PORT = 3001
+app.put('/api/notes/:id',(req,res,next) => {
+
+
+  const newNotes = {
+    content: req.body.content,
+    important: req.body.important || false,
+  }
+
+
+  Note.findByIdAndUpdate(req.params.id, newNotes , { new: true } )
+    .then(updatedNote => {
+      console.log(updatedNote)
+      res.json(updatedNote)
+    })
+    .catch(err => next(err))
+
+
+})
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+// this has to be the last loaded middleware.
+app.use(errorHandler)
+
+const PORT = process.env.PORT
 app.listen(PORT)
 console.log(`Server running on port ${PORT}`)
