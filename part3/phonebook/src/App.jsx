@@ -38,7 +38,7 @@ const App = () => {
     const person = {
       name: newName,
       number: newNumber,
-      id: persons[0] ? persons.at(-1).id + 1 : 1,
+      
     };
 
     if (person.name) {
@@ -46,7 +46,7 @@ const App = () => {
         if (person.name === same.name) {
           const updatedPerson = {
             ...person,
-            id: same.id,
+            id: same.id
           };
           window.confirm(`${person.name} is exist wanna change the number?`) &&
             personService
