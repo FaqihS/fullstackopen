@@ -1,4 +1,5 @@
 const config = require("./utils/config")
+require('express-async-errors')
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -37,7 +38,7 @@ app.use('/api/notes',notesRouter)
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler);
 
-module.exports =  app
+module.exports =  {app,}
 
 
 

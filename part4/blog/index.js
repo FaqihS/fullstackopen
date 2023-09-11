@@ -1,6 +1,6 @@
-import app from "./app.js";
-import { PORT } from "./utils/config.js";
-import { info } from "./utils/logger.js";
+const app = require("./app.js");
+const { PORT } = require("./utils/config.js");
+const { info } =  require("./utils/logger.js");
 
 app.listen(PORT,()=>{
   info('Listening on ',PORT)

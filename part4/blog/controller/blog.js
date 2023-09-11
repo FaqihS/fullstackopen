@@ -1,52 +1,46 @@
-import { Router } from "express";
-import Blog from "../models/blog.js";
-import { info } from "../utils/logger.js";
+const blogRoute = require("express").Router();
+const Blog = require("../models/blog");
 
-const blogRoute = Router();
-
-blogRoute.get("/", (req, res) => {
-  Blog.find({}).then((blogs) => {
-    blogs ? res.json(blogs) : res.status(404).end()
-  });
+blogRoute.get("/", async (req, res) => {
+  const blogs = await Blog.find({});
+  blogs ? res.json(blogs) : res.status(404).end();
 });
 
-blogRoute.get("/:id", (req, res, next) => {
-  Blog.findById(req.params.id)
-    .then((blog) => {
-      blog ? res.json(blog) : res.status(404).end()
-    })
-    .catch((err) => next(err));
+blogRoute.get("/:id", async (req, res, next) => {
+  const blog = await Blog.findById(req.params.id);
+  blog ? res.json(blog) : res.status(404).end();
 });
 
-blogRoute.post("/", (req, res, next) => {
-  const blog = new Blog(req.body);
+blogRoute.post("/", async (req, res, next) => {
+  const request = req.body;
 
-  blog
-    .save()
-    .then((savedBlog) => {
-      res.status(201).json(savedBlog);
-    })
-    .catch((err) => next(err));
+  if (!request.author | !request.title | !request.url) {
+    res.status(400).send({err:"Wrong request format"})
+  } else {
+    const blog = new Blog({
+      ...req.body,
+      likes: request.likes || 0,
+    });
+    const savedBlog = await blog.save();
+    res.status(201).json(savedBlog);
+  }
 });
 
-blogRoute.delete("/:id", (req, res, next) => {
-  Blog.findByIdAndDelete(req.params.id)
-    .then((result) => {
-      result ? res.status(204).end() : res.status(404).end()
-    })
-    .catch((err) => next(err));
+blogRoute.delete("/:id", async (req, res, next) => {
+  await Blog.findByIdAndDelete(req.params.id);
+  res.status(204).end();
 });
 
-blogRoute.put("/:id", (req, res, next) => {
+blogRoute.put("/:id", async (req, res, next) => {
   const blog = {
     ...req.body,
   };
 
-  Blog.findByIdAndUpdate(req.params.id, blog, { new: true })
-    .then((updatedBlog) => {
-      updatedBlog ? res.json(updatedBlog) : res.status(404).end()
-    })
-    .catch((err) => next(err));
+  const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
+    new: true,
+  });
+
+  updatedBlog ? res.json(updatedBlog) : res.status(404).end();
 });
 
-export default blogRoute
+module.exports = blogRoute;

@@ -52,7 +52,7 @@ describe("most blogs", () => {
     },
   ];
 
-  test("of many blogs", () => {
+  test("should return the author and total blogs", () => {
     expect(listHelper.mostBlogs(listWithManyBlogs)).toEqual({
       author: "Robert C. Martin",
       blogs: 3,

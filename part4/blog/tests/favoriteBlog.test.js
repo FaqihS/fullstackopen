@@ -1,7 +1,7 @@
 const listHelper = require("../utils/list_helper");
 
 describe("favorite blog", () => {
-  test("of many blogs", () => {
+  test("of many blogs, return blog with largest like", () => {
     const listWithManyBlogs = [
       {
         _id: "5a422a851b54a676234d17f7",

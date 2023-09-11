@@ -1,12 +1,16 @@
-import mongoose from "mongoose";
-import express from "express";
-import cors from "cors";
-import { error, info } from "./utils/logger.js";
-import blogRoute from "./controller/blog.js";
-import { errorHandler, reqLogger, unkownEndpoint } from "./utils/middleware.js";
-import { DB_URL } from "./utils/config.js";
-
+const express = require("express");
 const app = express();
+require('express-async-errors')
+const cors = require("cors");
+const { error, info } = require("./utils/logger");
+const blogRoute = require("./controller/blog");
+const {
+  errorHandler,
+  reqLogger,
+  unkownEndpoint,
+} = require("./utils/middleware");
+const { DB_URL } = require("./utils/config");
+const mongoose = require("mongoose");
 
 mongoose
   .connect(DB_URL)
@@ -26,4 +30,4 @@ app.use("/api/blogs", blogRoute);
 app.use(unkownEndpoint);
 app.use(errorHandler);
 
-export default app;
+module.exports =  app

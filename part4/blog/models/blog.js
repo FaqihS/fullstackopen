@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -17,4 +17,4 @@ blogSchema.set("toJSON", {
 
 const Blog = mongoose.model("Blog", blogSchema);
 
-export default Blog;
+module.exports =  Blog
