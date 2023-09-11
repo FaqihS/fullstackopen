@@ -38,6 +38,17 @@ const initialBlogs = [
   },
 ];
 
+const nonExistingId = async () => {
+  const fakeBlog = new Blog({
+    title: "Fake",
+    author: "Fake",
+    url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
+    likes: 2,
+  });
+  console.log(fakeBlog._id)
+  return fakeBlog._id.toString()
+};
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({});
 
@@ -46,5 +57,6 @@ const blogsInDb = async () => {
 
 module.exports = {
   blogsInDb,
+  nonExistingId,
   initialBlogs,
-}
+};

@@ -26,14 +26,17 @@ blogRoute.post("/", async (req, res, next) => {
   }
 });
 
-blogRoute.delete("/:id", async (req, res, next) => {
-  await Blog.findByIdAndDelete(req.params.id);
-  res.status(204).end();
+blogRoute.delete("/:id", async (req, res ) => {
+  const deleted = await Blog.findByIdAndRemove(req.params.id);
+  deleted ? res.status(204).end() : res.status(404).end()
 });
 
 blogRoute.put("/:id", async (req, res, next) => {
+
+  const blogToUpdate = await Blog.findById(req.params.id)
+
   const blog = {
-    ...req.body,
+    likes: blogToUpdate.likes + 1,
   };
 
   const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
