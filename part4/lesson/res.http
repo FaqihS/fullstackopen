@@ -1,4 +1,20 @@
+### User
+
+GET http://localhost:3001/api/users
+
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "name": "SuperUser",
+  "password": "123"
+}
+
+### Notes
 GET http://localhost:3001/api/notes
+
 
 GET http://localhost:3001/api/notes/64f5c9d22d6ec0fc0b3df3f3
 
@@ -17,8 +33,9 @@ POST http://localhost:3001/api/notes
 Content-Type: application/json
 
 {
-  "content": "Browser can execute only JavaScript2",
-  "important": true
+  "content": "Browser can execute only JavaScript",
+  "important": true,
+  "userId": "64ffab367761b6a236f56cdb"
 }
 
 
