@@ -9,7 +9,7 @@ const api = supertest(app);
 describe("when there is initially one user in db", () => {
   beforeEach(async () => {
     await User.deleteMany({});
-    const passwordHash = hash("sekret", 10);
+    const passwordHash = await hash("sekret", 10);
     const user = new User({ username: "root", passwordHash });
 
     await user.save();
@@ -37,7 +37,7 @@ describe("when there is initially one user in db", () => {
   });
 
   test("creation fails with proper statuscode and message if username already taken", async () => {
-    const usersAtStart = await helper.usersInDb();
+    const usersAtStart = await usersInDb();
 
     const newUser = {
       username: "root",
