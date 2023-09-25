@@ -3,11 +3,10 @@ require('express-async-errors')
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const noteRouter = require("./controller/note")
+const notesRouter = require("./controller/note")
 const middleware = require("./utils/middleware")
 const logger = require("./utils/logger")
 const mongoose =require('mongoose');
-const notesRouter = require("./controller/note");
 const userRouter = require('./controller/user');
 const loginRouter = require("./controller/login");
 
@@ -22,7 +21,6 @@ const url = config.MONGODB_URI
 logger.info('connecting to', url)
 
 mongoose.connect(url)
-
   .then(result => {
     logger.info('connected to MongoDB')
   })
