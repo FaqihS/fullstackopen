@@ -1,0 +1,75 @@
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RhIiwiaWQiOiI2NTEwZDhiNTFjMjA4NTlhODFiM2EzZDEiLCJpYXQiOjE2OTU2MDM0MzUsImV4cCI6MTY5NTYwMzQ5NX0.LU9BdcsPG2OfZQAH8qkv5Zp1OMuKDFVYAlUym75Y69o
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RhIiwiaWQiOiI2NTEwZDhiNTFjMjA4NTlhODFiM2EzZDEiLCJpYXQiOjE2OTU2MDM0NzQsImV4cCI6MTY5NTYwMzUzNH0.zmiJai7L46DD6Ha6T7WEb4qmOMkO7hAQPm7_GZiMN3c
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RhIiwiaWQiOiI2NTEwZDhiNTFjMjA4NTlhODFiM2EzZDEiLCJpYXQiOjE2OTU2MDM0OTIsImV4cCI6MTY5NTYwMzU1Mn0.h7f8rJFnPu5_GCvXZMOT_uq_cPlEjP03mjKNXJZU2IQ
+### Login
+
+POST http://localhost:3001/api/login
+Content-Type: application/json
+
+{
+  "username": "roota",
+  "name": "SuperUser",
+  "password": "123"
+}
+
+### User
+
+GET http://localhost:3001/api/users
+
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "root",
+  "name": "SuperUser",
+  "password": "123"
+}
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "roota",
+  "name": "SuperUser",
+  "password": "123"
+}
+
+GET http://localhost:3001/api/blogs
+
+GET http://localhost:3001/api/blogs/6510d28aaa30e6d8159c4030
+
+### roota
+DELETE http://localhost:3001/api/blogs/6510cff67c9ddfba7678ae62
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RhIiwiaWQiOiI2NTEwZDhiNTFjMjA4NTlhODFiM2EzZDEiLCJpYXQiOjE2OTU2MDI5MzUsImV4cCI6MTY5NTYwNjUzNX0._PR9GkDBUSZHtRoejv8PppIUXIouRrKsLP9221IRxps
+
+DELETE http://localhost:3001/api/blogs/6510cf17607158a91a288eef
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjY1MGI5YTJlZWExOWJiYzY2NWNkN2QxNiIsImlhdCI6MTY5NTYwMDA2NywiZXhwIjoxNjk1NjAzNjY3fQ.kEglY3prruoc14XVxl99Xx7iH3K_Xw9VEdMYjDvgKxc
+
+PUT http://localhost:3001/api/blogs/64f8692ccf1d182ec6e3464b
+Content-Type: application/json
+
+{
+  "title": "New Blog Updated",
+  "author": "The Author",
+  "url": "/new-blog",
+  "likes": 1234
+}
+
+###
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3RhIiwiaWQiOiI2NTEwZDhiNTFjMjA4NTlhODFiM2EzZDEiLCJpYXQiOjE2OTU2MDM0NzQsImV4cCI6MTY5NTYwMzUzNH0.zmiJai7L46DD6Ha6T7WEb4qmOMkO7hAQPm7_GZiMN3c
+
+{
+  "title": "New Blog real new1",
+  "author": "The Author",
+  "url": "/new-blog",
+  "likes": 1234
+}
+
+
+
+
+
+
