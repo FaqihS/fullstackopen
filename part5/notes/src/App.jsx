@@ -2,16 +2,10 @@ import { useEffect, useState } from "react";
 import noteService from "./services/note";
 import "./index.css";
 import loginService from "./services/login";
-
-const Note = ({ note, toggleImportance }) => {
-  const label = note.important ? "make not important" : "make important";
-  return (
-    <li className="note">
-      {note.content}
-      <button onClick={toggleImportance}>{label}</button>
-    </li>
-  );
-};
+import LoginForm from "./components/LoginForm";
+import Togglable from "./components/Togglable";
+import NoteForm from "./components/NoteForm";
+import Note from "./components/Note";
 
 const Notification = ({ message }) => {
   if (message == null) {
@@ -22,7 +16,6 @@ const Notification = ({ message }) => {
 
 const App = () => {
   const [notes, setNotes] = useState([]);
-  const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -54,22 +47,15 @@ const App = () => {
     ? notes
     : notes.filter((n) => n.important === true);
 
-  const addNote = async (event) => {
-    event.preventDefault();
-
-    const noteObject = {
-      content: newNote,
-      important: Math.random < 0.5,
-      id: notes.length + 1,
-    };
-
+  const addNote = async (noteObject) => {
     try {
       const note = await noteService.create(noteObject, user.token);
       setNotes(notes.concat(note));
-    } catch (e) {
-      setErrorMessage(e);
-    } finally {
-      setNewNote("");
+    } catch {
+      setErrorMessage("Cannot Add note");
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 1000);
     }
   };
 
@@ -84,21 +70,19 @@ const App = () => {
       );
 
       setUser(userLogin);
+      noteService.setToken(userLogin.token);
       setUsername("");
       setPassword("");
     } catch (err) {
       setErrorMessage("wrong credential");
       setTimeout(() => {
         setErrorMessage(null);
-      }, 5000);
+      }, 1000);
     }
   };
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
-  };
-  const handleChange = (e) => {
-    setNewNote(e.target.value);
   };
 
   const toggleImportanceOf = (id) => async () => {
@@ -108,62 +92,65 @@ const App = () => {
     try {
       const noteToUpdate = await noteService.update(id, changedNote);
       setNotes(notes.map((n) => (n.id !== id ? n : noteToUpdate)));
-    } catch (e) {
+    } catch {
       setErrorMessage(`'${note.content}' is Deleted from Server`);
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 1000);
     }
   };
 
-  const LoginForm = () => (
-    <form onSubmit={handleLogin}>
-      username
-      <input
-        type="text"
-        name="username"
-        value={username}
-        onChange={({ target }) => setUsername(target.value)}
-      />
-      password
-      <input
-        type="password"
-        name="password"
-        value={password}
-        onChange={({ target }) => setPassword(target.value)}
-      />
-      <button type="submit">login</button>
-    </form>
+  const Notes = () => (
+    <ul>
+      {notesToShow.map((note) => (
+        <Note
+          note={note}
+          key={note.id}
+          toggleImportance={toggleImportanceOf(note.id)}
+        />
+      ))}
+    </ul>
   );
 
   const noteForm = () => (
-    <form onSubmit={addNote}>
-      <input value={newNote} onChange={handleChange} />
-      <button type="submit">save</button>
-    </form>
+    <Togglable buttonLabel="New Note">
+      <NoteForm createNote={addNote} />
+    </Togglable>
   );
 
-  return (
-    <div>
-      <h1>Notes</h1>
-      {!user && LoginForm()}
-      {user && (
+  const loginForm = () => {
+    return (
+      <Togglable buttonLabel="Login">
+        <LoginForm
+          handleLogin={handleLogin}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          username={username}
+          password={password}
+        />
+      </Togglable>
+    );
+  };
+
+  const userForm = () => (
         <div>
           <p>{user.name}</p>
           <button onClick={handleLogout}>Logout</button>
           {noteForm()}
         </div>
-      )}
+  )
+
+  return (
+    <div>
+      <h1>Notes</h1>
       <Notification message={errorMessage} />
-      <button onClick={() => setShowAll(!showAll)}>
-        show {showAll ? "Important" : "All"}
-      </button>
-      <ul>
-        {notesToShow.map((note) => (
-          <Note
-            note={note}
-            key={note.id}
-            toggleImportance={toggleImportanceOf(note.id)}
-          />
-        ))}
-      </ul>
+      {user ? userForm() : loginForm()  }
+      <Togglable buttonLabel="Notes">
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? "Important" : "All"}
+        </button>
+        <Notes />
+      </Togglable>
     </div>
   );
 };

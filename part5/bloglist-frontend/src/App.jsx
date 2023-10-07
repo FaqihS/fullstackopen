@@ -62,6 +62,7 @@ const App = () => {
       setPassword("");
     }
   };
+
   const handleLogout = () => {
     window.localStorage.removeItem("loggedUser");
     setUser(null);

@@ -6,9 +6,9 @@ const setToken = (t)=>{
   token = `Bearer ${t}`
 }
 
-const getAll = () => {
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+const getAll = async() => {
+  const request = await axios.get(baseUrl)
+  return request.data
 }
 
 const login = async (user) =>{
