@@ -19,6 +19,14 @@ blogRoute.get("/:id", async (req, res, next) => {
   blog ? res.json(blog) : res.status(404).end();
 });
 
+const getToken = (req) => {
+  const authorization = req.get("authorization");
+  if (authorization && authorization.startsWith("Bearer ")) {
+    return authorization.replace("Bearer ", "");
+  }
+
+  return null;
+};
 
 blogRoute.post("/", async (req, res) => {
   const { author, title, url, likes } = req.body;

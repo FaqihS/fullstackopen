@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import noteService from "./services/note";
 import "./index.css";
 import loginService from "./services/login";
@@ -21,6 +21,8 @@ const App = () => {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState();
+
+  const noteFormRef = useRef()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +50,7 @@ const App = () => {
     : notes.filter((n) => n.important === true);
 
   const addNote = async (noteObject) => {
+    noteFormRef.current.toggleVisibility()
     try {
       const note = await noteService.create(noteObject, user.token);
       setNotes(notes.concat(note));
@@ -113,7 +116,7 @@ const App = () => {
   );
 
   const noteForm = () => (
-    <Togglable buttonLabel="New Note">
+    <Togglable buttonLabel="New Note" ref={noteFormRef}>
       <NoteForm createNote={addNote} />
     </Togglable>
   );
@@ -145,12 +148,10 @@ const App = () => {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       {user ? userForm() : loginForm()  }
-      <Togglable buttonLabel="Notes">
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? "Important" : "All"}
         </button>
         <Notes />
-      </Togglable>
     </div>
   );
 };
