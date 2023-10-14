@@ -1,13 +1,13 @@
-import { useState } from "react";
-import Togglable from "./Togglable";
+import { useState } from 'react'
+import Togglable from './Togglable'
 
 const blogStyle = {
   paddingTop: 10,
   paddingLeft: 2,
-  border: "solid",
+  border: 'solid',
   borderWidth: 1,
   marginBottom: 5,
-};
+}
 
 const deleteStyle = {
   color: 'red',
@@ -22,13 +22,13 @@ const Blog = ({ children,blog,handleLike, handleDelete }) => {
       <div>
         <Togglable buttonLabelShow="Show" buttonLabelHide="Hide">
           <p>{blog.url}</p>
-          <p>{blog.likes}</p> <button onClick={()=>handleLike(blog)}>like</button> 
+          <p>{blog.likes}</p> <button onClick={() => handleLike(blog)}>like</button> 
           <p>{blog.user?.name}</p>
           {children}
         </Togglable>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

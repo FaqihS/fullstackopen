@@ -1,21 +1,21 @@
-const Note = require('../models/note');
-const User = require('../models/user');
+const Note = require('../models/note')
+const User = require('../models/user')
 
 
 const initialNotes = [
   {
-    content: "HTML is easy",
+    content: 'HTML is easy',
     important: false,
   },
   {
-    content: "Browser can execute only JavaScript",
+    content: 'Browser can execute only JavaScript',
     important: true,
   },
-];
+]
 
-const nonExistingId = async () =>{
+const nonExistingId = async () => {
 
-  const note = new Note({content: 'willremoved'})
+  const note = new Note({ content: 'willremoved' })
   await note.save()
   await note.deleteOne()
 

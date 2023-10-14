@@ -1,6 +1,6 @@
-export default function Notification ({notif}){
+export default function Notification ({ notif }){
   return (
-  <div>
+    <div>
       <h2 className={notif.type}>{notif.message}</h2>
     </div>
   )
